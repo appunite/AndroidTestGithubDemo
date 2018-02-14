@@ -1,5 +1,5 @@
 ## Zadanie #1
-Poprawić błąd związany z wykonywaniem requestów na głównym wątku
+Sprawdzić i poprawić problem z logowaniem
 
 ## Zadanie #2
 Poprawić crasha na podstawie logów aplikacji
