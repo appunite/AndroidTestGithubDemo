@@ -48,10 +48,8 @@ class RepositoriesActivity : BaseActivity() {
         setUpRecyclerView()
 
         subscription.addAll(
-
                 presenter.itemsObservable
                         .subscribe(adapter),
-
                 presenter.errorObservable
                         .subscribe(ErrorMessages.show(repository_main_view))
         )

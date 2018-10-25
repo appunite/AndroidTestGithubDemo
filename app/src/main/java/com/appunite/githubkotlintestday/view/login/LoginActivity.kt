@@ -31,8 +31,10 @@ class LoginActivity : BaseActivity() {
         fun newInstance(context: Context) = Intent(context, LoginActivity::class.java)
     }
 
-    @Inject lateinit var presenter: LoginPresenter
-    @Inject lateinit var tokenPreferences: TokenPreferences
+    @Inject
+    lateinit var presenter: LoginPresenter
+    @Inject
+    lateinit var tokenPreferences: TokenPreferences
 
     private val subscription: CompositeSubscription = CompositeSubscription()
 
@@ -40,24 +42,19 @@ class LoginActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_activity)
 
-        val snackbar =
-                subscription.addAll(
-
-                        RxTextView.textChanges(username_edit_text)
-                                .subscribe { username_text_input.error = null },
-
-                        RxTextView.textChanges(password_edit_text)
-                                .subscribe { password_text_input.error = null },
-
+        subscription.addAll(
+                RxTextView.textChanges(username_edit_text)
+                        .subscribe { username_text_input.error = null },
+                RxTextView.textChanges(password_edit_text)
+                        .subscribe { password_text_input.error = null },
                 presenter.requestSignInObservable
                         .compose(ResponseOrError.onlySuccess())
                         .subscribe { startActivity(RepositoriesActivity.newIntent(this)) },
-
-                        presenter.requestSignInObservable
-                                .compose(ResponseOrError.onlyError())
-                                .doOnNext(ErrorMessages.show(container))
-                                .subscribe { tokenPreferences.edit().clear() }
-                )
+                presenter.requestSignInObservable
+                        .compose(ResponseOrError.onlyError())
+                        .doOnNext(ErrorMessages.show(container))
+                        .subscribe { tokenPreferences.edit().clear() }
+        )
     }
 
     override fun onDestroy() {
